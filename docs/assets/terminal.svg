@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="330" viewBox="0 0 860 330" font-family="Consolas, Menlo, monospace" font-size="13">
+  <rect width="860" height="330" rx="10" fill="#0d1117"/>
+  <circle cx="22" cy="20" r="6" fill="#ff5f56"/><circle cx="42" cy="20" r="6" fill="#ffbd2e"/><circle cx="62" cy="20" r="6" fill="#27c93f"/>
+  <g fill="#c9d1d9">
+    <text x="20" y="54"><tspan fill="#7ee787">$</tspan> py -3 scripts/check_allowlist.py --commands tests/fixtures/case5-commands.txt \</text>
+    <text x="20" y="72">    --settings tests/fixtures/case5-settings-before.json</text>
+    <text x="20" y="100">7 command part(s) not allowlisted:</text>
+    <text x="20" y="120">- [Bash] codex --version               <tspan fill="#79c0ff">-&gt; Bash(codex --version)</tspan></text>
+    <text x="20" y="140">- [Bash] codex debug models            <tspan fill="#79c0ff">-&gt; Bash(codex debug *)</tspan></text>
+    <text x="20" y="160">- [Bash] py -3 bin/tests/test_crew.py  <tspan fill="#79c0ff">-&gt; Bash(py -3 bin/tests/test_crew.py)</tspan></text>
+    <text x="20" y="180">- [Bash] git status -sb                <tspan fill="#79c0ff">-&gt; Bash(git status *)</tspan></text>
+    <text x="20" y="200">- [Bash] git commit -m "feat(models)…" <tspan fill="#79c0ff">-&gt; Bash(git commit *)</tspan></text>
+    <text x="20" y="220">- [Bash] git push origin feat/models…  <tspan fill="#79c0ff">-&gt; Bash(git push origin feat/models-2026-09)</tspan></text>
+    <text x="20" y="240">- [Bash] py -3 -c "import sys,json;…"</text>
+    <text x="20" y="260" fill="#f0883e">    -&gt; no rule proposed (destructive or inline code) - keep the prompt</text>
+    <text x="20" y="296" fill="#8b949e"># exit 1; against case5-settings-after.json only the inline py -3 -c part is left</text>
+  </g>
+</svg>

@@ -1,0 +1,31 @@
+# source: C:\Users\tzaru\.claude/projects\C--Users-tzaru-Documents-AI-Development-OS-workflowai-factory\7034c7c0-6a33-4814-a506-43faca145808.jsonl
+
+No, I want you to run the test, yes, because I want to be able to set a ticket at the AGY. 
+But first of all, I'm in a current run with the factory and I think it got confused a little bit and it sent me a conclusion.
+"Root cause of the second failure, and it's my recovery that was incomplete: crew clean removes .crew/ but not git branches. The integration branch crew/feature-launch-readiness-audits survived, still pointing at d3817eb, and the re-run reused it instead of re-cutting from the fixed base. So the workers never got the fix and hit the identical broken gate — then the escalation died on the API limit and parked everything.
+
+
+What happened while the session was out
+
+The re-run parked at 13:46 — and the park reason was not a verdict:
+
+senior: senior call failed rc=1: terminal_reason=api_error
+
+The escalation hit the same API limit you did. escalations_used = 0, so nothing was charged.
+
+But the underlying cause was a second mistake of mine. crew clean removes .crew/ but not git branches, so the stale integration branch survived still pointing at d3817eb — the pre-fix base. The re-run reused it, the workers never received my supabase.ts fix, and they hit the identical broken gate. I fixed the base and didn't check the branch that hangs off it.
+
+Recovery
+
+Per your call, I salvaged rather than re-ran. All three tickets had produced exactly their briefed files, twice, with no scope creep. I took the r1a2 attempts (all 21 tables covered, and 16 cross-tenant write attempts vs 10 — writes being the half that was actually untested), put them on the fixed base, and reviewed them properly."
+
+
+I want to understand what went wrong. What is the problem with the crookling or something? If we can, we need to fix it, or it's just one time and we do not need to overengineer this. Maybe it's a problem with the team lead and not a problem with the factory itself. 
+
+Long story short, I need some answers, also about the AGy, also about the factory itself, also about the code line also about the workflow 
+
+Because I'm having trouble making up my mind about whether I need to tell the session using the factory right now to continue or to fix something and then tell it to continue. I think it caught the problem and fixed it itself, but every problem of this search costs me a lot of tokens. 
+
+Now, with the AGy, it's something that I'm willing to give some tokens for eventually, sit the AGy with tickets 
+but I do not want to waste tokens on mistakes that we could prevent 
+and mistakes that a factory should prevent
