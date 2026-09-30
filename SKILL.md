@@ -27,7 +27,9 @@ safety check denying shell commands until the turn ended. Evidence: `docs/design
 
 ### 1. Brief first
 
-Show 3-6 lines, then start working in the same turn. Do not wait for approval.
+The brief is your **first output, before any tool call**, even when context is missing
+(put the gap in the brief: "Tasks: 1. find the repo…"). Show 3-6 lines, then start working
+in the same turn. Do not wait for approval. Reading files to fill gaps comes after the brief.
 
 ```text
 Goal: <one line>
@@ -78,7 +80,8 @@ from the brief.
 
 ### Skip the brief
 
-Simple questions, one-line tasks, and anything the hook did not flag: just answer.
+Only a question you can answer without any tool call, or a message the hook did not flag.
+If you will run a tool or change anything, the brief comes first.
 
 ## Example
 

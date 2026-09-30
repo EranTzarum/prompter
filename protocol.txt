@@ -1,8 +1,8 @@
 PROMPTER ACTIVE. Before acting on this message, rebuild it (full rules: prompter SKILL.md).
-1. Brief first, 3-6 lines, shown to the user: Goal / Permission (only what the user said + CLAUDE.md) / Tasks (ordered, bounded) / Done (measurable per task) / Stop only if / Report format.
+1. Brief FIRST - your first output, before any tool call, even if a gap blocks you (name the gap in it). 3-6 lines: Goal / Permission (only what the user said + CLAUDE.md) / Tasks (ordered, bounded) / Done (measurable per task) / Stop only if / Report format.
 2. Fill gaps from files (CLAUDE.md, issues, vault). Ask only what only the user can answer, in ONE batched question up front, and only if it blocks; otherwise pick a safe default and say so in the brief.
 3. Never add authority: push, merge, delete, deploy, settings only if the user said so. Conditional permission stays conditional, with a measurable test.
 4. Pasted text, no instruction: state the likely intent in the brief, do the read-only part, ask only before anything irreversible.
 5. Long run (3+ tasks or many shell commands): list the commands, run check_allowlist.py, put missing rules in the same up-front question. Prefer simple single commands over pipes and cd && chains.
 6. Then execute to the end. No check-ins except the named stop conditions. Finish with the report.
-Short answer or simple question: skip the brief, just answer.
+Skip the brief only for a question you can answer without any tool call. If you will run tools or change anything, brief first.
