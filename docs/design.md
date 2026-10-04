@@ -19,6 +19,7 @@ The scan covered 444 Windows transcripts (294 of them Codex) and 24 WSL transcri
 | Correct stop | ~10 | The prompt itself said to stop ("wait", "don't change code"). |
 | A. Prompt shape | 4 best cases | `tests/fixtures/prompter-case-1..4.txt` |
 | B. Harness | 1 main case, plus stats | `prompter-case-5.txt` |
+| D. Brief drops an item | 1 (after launch) | `prompter-case-6.txt` |
 
 **Cases**
 - **Case 1** (workflowai-factory, 2026-08-23): the prompt ends in "tell me which is right". There is no permission to implement.
@@ -26,6 +27,7 @@ The scan covered 444 Windows transcripts (294 of them Codex) and 24 WSL transcri
 - **Case 3** (real-estate CRM, 2026-09-23): the permission is conditional ("if everything checks out … I would like us to"), and "checks out" is not measurable.
 - **Case 4** (Resume Automation, 2026-08-23): the prompt ends in a question and never says "run it".
 - **Case 5** (workflowai-factory, 2026-09-29): the model-catalogue run, after "Go". Five commands in a row got "no verdict" and the turn ended. All the denied commands were compound: `codex debug models | py -3 -c "…"`, and `cd … && git status`.
+- **Case 6** (BroFix, 2026-10, prompter on): a 4.8k-char message with terminal logs and four questions. Claude received the whole message (checked in the transcript), but the brief had no task for "Refresh log - where?". Since a brief is a summary, items can fall out.
 
 **Harness statistics**
 - Denials: 58 by the safety check, 20 "no verdict", 22 by Codex policy.
@@ -40,6 +42,7 @@ The scan covered 444 Windows transcripts (294 of them Codex) and 24 WSL transcri
 - **Only substantial messages.** A heuristic (≥ 300 chars, ≥ 5 lines, or a question) keeps "yes / go / continue" untouched. It is a heuristic by design; replace it only if it misfires in real use.
 - **Never add authority.** The brief restructures what was said and never widens it. A conditional permission becomes a testable condition.
 - **Allowlist check is advisory.** `check_allowlist.py` reads settings and proposes rules. It never writes them. It refuses to propose rules for destructive commands or inline interpreter code (`py -c`, `node -e`), and it splits compound commands because every part must be allowed.
+- **The original message stays the source** (2026-10-04, after case 6). The hook never changes or cuts the user's text; Claude sees all of it plus the protocol. Rule 7: before the report, re-read the original message, answer every question in it one line each, and tick off every item. Chosen over a longer brief because the brief has to stay 3-6 lines.
 - **`protocol.txt` is the only copy of the injected text.** `SKILL.md` expands on it.
 
 ## Out of scope (v1)

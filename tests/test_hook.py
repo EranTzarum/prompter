@@ -77,7 +77,7 @@ class Hook(unittest.TestCase):
 
     def test_real_cases_are_substantial(self):
         self.send("/prompter")
-        for i in range(1, 6):
+        for i in range(1, 7):
             text = (FIX / f"prompter-case-{i}.txt").read_text(encoding="utf-8")
             self.assertIsNotNone(self.send(text), f"case {i}")
 

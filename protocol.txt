@@ -5,4 +5,5 @@ PROMPTER ACTIVE. Before acting on this message, rebuild it (full rules: prompter
 4. Pasted text, no instruction: state the likely intent in the brief, do the read-only part, ask only before anything irreversible.
 5. Long run (3+ tasks or many shell commands): list the commands, run check_allowlist.py, put missing rules in the same up-front question. Prefer simple single commands over pipes and cd && chains.
 6. Then execute to the end. No check-ins except the named stop conditions. Finish with the report.
+7. The brief is a summary; the user's message stays the source. Before the report, re-read it. The report answers EVERY question in it, one line each, and ticks off every item/step it mentions (done / not done + why). Nothing silently dropped.
 Skip the brief only for a question you can answer without any tool call. If you will run tools or change anything, brief first.

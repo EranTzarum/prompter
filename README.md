@@ -16,7 +16,7 @@ Type `/prompter` once. Every long message, pasted report or question gets rebuil
 
 ## TL;DR
 
-Type **`/prompter`** in a Claude Code session and keep talking as usual. A `UserPromptSubmit` **hook** attaches a short protocol to every substantial message, so Claude first shows a **3-6 line brief** (goal, permission, ordered tasks, measurable "done", stop conditions, report format) and then works to the end in the same turn. Before a long run it also checks that the shell commands the run needs are **allowlisted**, so the auto-mode safety check doesn't end the turn. `prompter off` turns it off.
+Type **`/prompter`** in a Claude Code session and keep talking as usual. A `UserPromptSubmit` **hook** attaches a short protocol to every substantial message, so Claude first shows a **3-6 line brief** (goal, permission, ordered tasks, measurable "done", stop conditions, report format) and then works to the end in the same turn. Your original message is never changed or cut: Claude reads all of it, logs included, and the final report answers **every question** in it. Before a long run it also checks that the shell commands the run needs are **allowlisted**, so the auto-mode safety check doesn't end the turn. `prompter off` turns it off.
 
 <p align="center">
   <img src="docs/assets/flow.svg" alt="Message → hook → brief → allowlist check → execute; short replies pass through" width="980">
@@ -34,8 +34,9 @@ A real transcript scan (details in [docs/design.md](docs/design.md)) found agent
 | The permission was conditional ("if everything checks out… I would like us to"), so no merge happened | real-estate CRM, 2026-09-23 | the merge waited for the next turn |
 | Several questions were mixed into a pasted report, so the agent answered and handed the choice back | workflowai-factory, 2026-09-22 | a manual "fix all" |
 | 5 shell commands got "no verdict" from the auto-mode check, so the turn ended | workflowai-factory, 2026-09-29 | an overnight run stalled |
+| With prompter on, a long message with logs and 4 questions got a brief that had no task for one question ("Refresh log - where?") | BroFix, 2026-10 | a question could go unanswered |
 
-The brief fixes the first three: permission is explicit, the tasks are ordered, and "done" is measurable. `check_allowlist.py` catches the fourth before the run starts.
+The brief fixes the first three: permission is explicit, the tasks are ordered, and "done" is measurable. `check_allowlist.py` catches the fourth before the run starts. Rule 7 catches the fifth: the report closes every question and item from the original message.
 
 ---
 
@@ -44,6 +45,7 @@ The brief fixes the first three: permission is explicit, the tasks are ordered, 
 - **Per-session mode.** `/prompter` writes `~/.claude/prompter/active/<session_id>`; other sessions are unaffected.
 - **Only substantial messages.** A message counts when it is ≥ 300 chars, ≥ 5 lines, or a question. `yes`, `go`, `continue` and `/commands` pass through.
 - **Visible brief, no waiting.** Claude shows the brief and starts in the same turn.
+- **Nothing dropped.** Before the report, Claude re-reads your original message, answers every question one line each, and ticks off every item (rule 7 in `protocol.txt`).
 - **Never adds authority.** Push, merge, delete and deploy happen only if you said so. Conditional permission becomes a testable condition.
 - **Allowlist check.** `scripts/check_allowlist.py` splits compound commands, matches them against your settings, and proposes narrow rules. It refuses to propose rules for destructive commands or inline `-c` code.
 - **Fails safe.** The hook always exits 0 and prints nothing on bad input, so it never blocks a prompt.
@@ -120,7 +122,8 @@ sequenceDiagram
 
 1. **A hook, not a rewrite.** A hook can't replace your text, but it can attach instructions before Claude reads it. Claude rebuilds the message as a visible brief.
 2. **Two causes, two fixes.** The brief fixes prompt-shaped stops. The allowlist check fixes harness-shaped stops.
-3. **One up-front question at most.** Gaps get filled from files first. Anything only you can answer is asked once, before work starts.
+3. **The original stays the source.** The brief steers the work; the report is checked against your full message.
+4. **One up-front question at most.** Gaps get filled from files first. Anything only you can answer is asked once, before work starts.
 
 | # | Part | Takes | Produces |
 |---|---|---|---|
@@ -139,7 +142,7 @@ protocol.txt                  text the hook injects
 hooks/prompter_hook.py        UserPromptSubmit hook
 scripts/check_allowlist.py    allowlist checker (read-only)
 tests/                        unittest suites
-tests/fixtures/               5 real prompts that stopped early, case-5 settings
+tests/fixtures/               6 real prompts (cases 1-6), case-5 commands and settings
 docs/design.md                evidence and decisions
 docs/evals.md                 model-behaviour eval protocol and results
 docs/assets/                  README images
@@ -153,7 +156,7 @@ docs/assets/                  README images
 py -3 -m unittest discover tests
 ```
 
-The tests prove the hook's on/off handling, per-session isolation, the short-reply pass-through, and its silent handling of bad input. They also prove that the checker flags the real case-5 commands against the old settings and clears them against the new ones. The model's own behaviour is checked by hand with [docs/evals.md](docs/evals.md).
+The tests prove the hook's on/off handling, per-session isolation, the short-reply pass-through, and its silent handling of bad input. They also prove that the checker flags the real case-5 commands against the old settings and clears them against the new ones. How the model actually behaves is checked separately with [docs/evals.md](docs/evals.md): headless `claude -p` runs in plan mode on the real prompts, including the case-6 "answer every question" check.
 
 ---
 
@@ -168,6 +171,8 @@ The tests prove the hook's on/off handling, per-session isolation, the short-rep
 ## ❓ FAQ
 
 **Does it change my message?** No. Your text reaches Claude unchanged; the hook only adds context next to it.
+
+**Does Claude still see my logs and pasted text, or only the brief?** All of it. The brief is Claude's own summary. The original stays the source, and the report has to answer every question in it.
 
 **Does it edit settings or grant permissions?** No. `check_allowlist.py` only reads settings and proposes rules, and you approve any change.
 

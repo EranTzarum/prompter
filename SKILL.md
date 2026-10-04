@@ -78,6 +78,19 @@ When the run has 3+ tasks or will need many shell commands:
 No mid-run check-ins other than the named stop conditions. End with the report format
 from the brief.
 
+### 7. Close every item from the original message
+
+The brief is a summary and can drop small items; the user's message stays the source
+(logs, pasted text, side questions). Before the report, re-read the original message.
+The report:
+
+- answers **every** question in it, one line each ("Why Google API? …", "Refresh log - where? …");
+- ticks off every item or step it mentions: done, or not done and why.
+
+Nothing is silently dropped. Real miss that led to this rule: a BroFix message with
+terminal logs and four questions, where "Refresh log - where?" had no task in the
+brief (`tests/fixtures/prompter-case-6.txt`).
+
 ### Skip the brief
 
 Only a question you can answer without any tool call, or a message the hook did not flag.
