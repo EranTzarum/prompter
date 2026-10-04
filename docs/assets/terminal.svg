@@ -6,12 +6,12 @@
   <g fill="#D1FAF5">
     <text x="20" y="62"><tspan fill="#14B8A6">$</tspan> py -3 scripts/check_allowlist.py --commands run-commands.txt</text>
     <text x="20" y="92">7 command part(s) not allowlisted:</text>
-    <text x="20" y="114">- [Bash] codex --version                    <tspan fill="#5EEAD4">-&gt; Bash(codex --version)</tspan></text>
-    <text x="20" y="134">- [Bash] codex debug models                 <tspan fill="#5EEAD4">-&gt; Bash(codex debug *)</tspan></text>
-    <text x="20" y="154">- [Bash] py -3 tests/run_tests.py           <tspan fill="#5EEAD4">-&gt; Bash(py -3 tests/run_tests.py)</tspan></text>
-    <text x="20" y="174">- [Bash] git status -sb                     <tspan fill="#5EEAD4">-&gt; Bash(git status *)</tspan></text>
-    <text x="20" y="194">- [Bash] git commit -m "feat(models): …"    <tspan fill="#5EEAD4">-&gt; Bash(git commit *)</tspan></text>
-    <text x="20" y="214">- [Bash] git push origin feat/model-catalog <tspan fill="#5EEAD4">-&gt; Bash(git push origin feat/model-catalog)</tspan></text>
+    <text x="20" y="114">- [Bash] codex --version<tspan x="390" fill="#5EEAD4">-&gt; Bash(codex --version)</tspan></text>
+    <text x="20" y="134">- [Bash] codex debug models<tspan x="390" fill="#5EEAD4">-&gt; Bash(codex debug *)</tspan></text>
+    <text x="20" y="154">- [Bash] py -3 tests/run_tests.py<tspan x="390" fill="#5EEAD4">-&gt; Bash(py -3 tests/run_tests.py)</tspan></text>
+    <text x="20" y="174">- [Bash] git status -sb<tspan x="390" fill="#5EEAD4">-&gt; Bash(git status *)</tspan></text>
+    <text x="20" y="194">- [Bash] git commit -m "feat(models): …"<tspan x="390" fill="#5EEAD4">-&gt; Bash(git commit *)</tspan></text>
+    <text x="20" y="214">- [Bash] git push origin feat/model-catalog<tspan x="390" fill="#5EEAD4">-&gt; Bash(git push origin feat/model-catalog)</tspan></text>
     <text x="20" y="234">- [Bash] py -3 -c "import sys,json; …"</text>
     <text x="20" y="254" fill="#FBBF24">    -&gt; no rule proposed (destructive or inline code) - keep the prompt</text>
     <text x="20" y="290" fill="#6B8F8B"># exit 1. Claude asks you once, up front, to approve the narrow rules - then runs without stalling.</text>
