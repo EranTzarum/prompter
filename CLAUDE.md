@@ -18,6 +18,11 @@ Why and evidence: `docs/design.md`.
 - `check_allowlist.py` never writes settings, and never proposes rules for destructive commands or inline code.
 - The protocol never grants authority the user didn't give.
 - Stdlib only, no dependencies.
+- **This repo is public.** No personal paths, usernames, private project or
+  client names, real prompts or logs in any tracked file. Examples and fixtures
+  use invented details with the same problem shape. Before every push:
+  `node ~/.claude/skills/readmelyzer/scripts/check-readme.mjs . --public --all-files`
+  must print no `LEAK:` line.
 
 ## Gate
 
