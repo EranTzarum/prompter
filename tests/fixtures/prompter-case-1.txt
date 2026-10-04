@@ -1,14 +1,18 @@
-# source: C:\Users\tzaru\.claude/projects\C--Users-tzaru-Documents-AI-Development-OS-workflowai-factory\f141daa7-e430-4267-9e4a-87cee534ce25.jsonl
+# anonymized: invented text with the same problem shape as a real prompt that stopped early (cause A: ends in a question, no permission to implement)
 
-Bug: `notify_session` wake-up silently fails against a live interactive session — measured, not theoretical.
-Your own `CLAUDE.md` (line 678) already flags this as unproven: "`notify_session` has never been proven against a LIVE interactive session. `claude --resume <id> -p` may re-enter it or may only append a headless turn to the transcript." I just measured it. It fails.
-Repro, this run: `crew run --dag crew.json --detach --notify-session d0f5a5b0-b206-466d-9e70-f863b8276f3b`. Driver ran, parked after 2 escalations at 17:05. Driver log confirms: `NOTIFY session d0f5a5b0-... (detached)`, correct session ID. `.crew/logs/notify.log` was created at that exact timestamp — and is 0 bytes. My live session never received the wake. I found out the run had parked ~4 hours later only because the user asked me directly.
-Root cause, as I understand it: `notify_session` spawns a brand-new `claude --resume <id> -p "<msg>"` as a detached OS process, disconnected from the harness. It's not the same channel as a harness-tracked `run_in_background` task finishing — that path reliably wakes the live session because the harness itself observes the process exit. This new path is a second, independent CLI invocation with no guarantee it re-enters the open interactive session versus just writing a headless turn nobody sees.
-My concern as the user, not just the bug report: we moved off `run_in_background` specifically so a harness kill signal couldn't take out the driver mid-run. But `run_in_background` gave us something we've now lost — visibility. I could see the task was alive, see it working, see if it got killed. Fully detached, I have none of that; I only find out by polling `crew status` myself, which defeats the point of an unattended factory.
-What I need from you: a design that gives me both — survives an accidental harness kill AND gives me live visibility/reliable wake without babysitting. Options I can imagine, tell me which is right or propose better:
+Bug: the background worker's "done" notification silently never reaches an open session - measured, not theoretical.
+The project notes already flag this as unproven: "the notify step has never been tested against a live session; it may only append a line to the log." I just measured it. It fails.
 
-1. Go back to `run_in_background`, but add whatever protection stops it from being killed by the specific event that killed the two drivers on 2026-08-19 (harness-wide kill-all-agents gesture, per your own incident notes).
-2. Keep `--detach`, fix `notify_session` itself so the wake is proven to land in a live session (not just fire-and-forget), and separately give me a way to see the driver is alive/working while detached (not just `crew status` on demand).
-3. Something else — hybrid, a lightweight heartbeat, whatever you think actually solves both problems.
+Repro, this run: `tool run --plan plan.json --detach --notify <session-id>`. The worker ran, paused after two retries, and the worker log shows `NOTIFY <session-id> (detached)` with the right id. The notify log says the message was sent. My open session never saw it.
+
+Root cause, as I understand it: the notify step starts a brand-new detached process that resumes the session headlessly. That is not the same channel as a tracked background task finishing, which is the only thing that wakes an open session.
+
+My concern as the user, not just the bug: we moved to detached mode so an accidental "stop all agents" could not kill the worker mid-run. But the tracked mode gave us visibility, and we lost it.
+
+What I need from you: a design that gives me both - survives an accidental kill AND gives me live visibility and a reliable wake. Options I can imagine, tell me which is right or propose better:
+
+1. Go back to tracked background tasks, plus protection against the kill gesture that stopped two runs last time.
+2. Keep detached mode, make the wake provably land in a live session, and add a way to see the worker is alive.
+3. Something else - a hybrid, a heartbeat, whatever actually solves both.
 
 Not resuming any run until this is resolved.

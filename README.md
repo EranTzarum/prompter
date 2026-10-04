@@ -4,226 +4,200 @@
 
 # prompter
 
-**Long prompts in, finished work out.**
-Type `/prompter` once. Claude turns every messy message into a short plan, then works it through to the end.
+**Say it messy. Get it finished.**
+A Claude Code mode that turns every long, tangled message into a short plan, then works it through to the end.
 
-[![Claude Code](https://img.shields.io/badge/Claude%20Code-skill%20%2B%20hook-8A63D2)](#-quick-start)
-[![Python](https://img.shields.io/badge/python-stdlib%20only-3776AB)](#-quick-start)
-[![Tests](https://img.shields.io/badge/tests-26%20passing-brightgreen)](#-verify)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-skill%20%2B%20hook-14B8A6)](#install)
+[![Python](https://img.shields.io/badge/python-stdlib%20only-0F2E2B)](#install)
+[![Tests](https://img.shields.io/badge/tests-26%20passing-14B8A6)](#verify)
+[![License: MIT](https://img.shields.io/badge/license-MIT-0F2E2B)](LICENSE)
 
 </div>
 
 ---
 
-## ⚡ TL;DR
+## At a glance
 
-| 🧑 You do | ⚙️ It does | 🎁 You get |
+| You do | prompter does | You get |
 |---|---|---|
-| Type `/prompter`, then talk as usual | A hook makes Claude write a 3-6 line **brief** (goal, permission, tasks, done, stop-if, report) before acting | Work that runs to the end, and a report that answers **every question** you asked |
-
-Your message is never changed or cut; Claude reads all of it, logs included. Before long runs it also checks that the needed shell commands are **allowlisted**.
+| Type `/prompter` once, then talk like you always do | Before Claude acts, it writes a 3-6 line **brief**: goal, permission, ordered tasks, what "done" means, when to stop | Work that runs to the end, and a report that answers **every question** you asked |
 
 <p align="center">
-  <img src="docs/assets/flow.svg" alt="Message → hook → brief → allowlist check → execute; short replies pass through" width="980">
+  <img src="docs/assets/flow.svg" alt="A messy message with logs and three questions becomes a brief, then a report that answers each question" width="980">
 </p>
 
 ---
 
-## 🤔 Why
+## Why
 
-Agents kept stopping halfway to ask "want me to…?". A scan of real transcripts ([docs/design.md](docs/design.md)) showed why:
+You paste logs, mix in three questions, and add "if it all checks out, merge it". Claude does part of the work, then stops to ask *"want me to…?"*. You type "yes", and it happens again.
 
-| 🔥 What went wrong | 📍 Where | 💸 Cost |
-|---|---|---|
-| The prompt ended in a question, so the agent asked "want me to…?" | workflowai-factory, 2026-08-23 | a nudge, then a restart |
-| The permission was conditional ("if everything checks out… I would like us to"), so no merge happened | real-estate CRM, 2026-09-23 | the merge waited for the next turn |
-| Several questions were mixed into a pasted report, so the agent answered and handed the choice back | workflowai-factory, 2026-09-22 | a manual "fix all" |
-| 5 shell commands got "no verdict" from the auto-mode check, so the turn ended | workflowai-factory, 2026-09-29 | an overnight run stalled |
-| With prompter on, a long message with logs and 4 questions got a brief that had no task for one question ("Refresh log - where?") | BroFix, 2026-10 | a question could go unanswered |
+A scan of a few hundred real agent sessions found the same few causes behind most of these stops:
 
-The brief fixes the first three: permission is explicit, the tasks are ordered, and "done" is measurable. `check_allowlist.py` catches the fourth before the run starts. Rule 7 catches the fifth: the report closes every question and item from the original message.
-
----
-
-## ✨ Features
-
-- 🎚️ **Per-session mode.** `/prompter` writes `~/.claude/prompter/active/<session_id>`; other sessions are unaffected.
-- 🧹 **Only substantial messages.** A message counts when it is ≥ 300 chars, ≥ 5 lines, or a question. `yes`, `go`, `continue` and `/commands` pass through.
-- 📝 **Visible brief, no waiting.** Claude shows the brief and starts in the same turn.
-- ✅ **Nothing dropped.** Before the report, Claude re-reads your original message, answers every question one line each, and ticks off every item (rule 7 in `protocol.txt`).
-- 🛡️ **Never adds authority.** Push, merge, delete and deploy happen only if you said so. Conditional permission becomes a testable condition.
-- 🔑 **Allowlist check.** `scripts/check_allowlist.py` splits compound commands, matches them against your settings, and proposes narrow rules. It refuses to propose rules for destructive commands or inline `-c` code.
-- 🧯 **Fails safe.** The hook always exits 0 and prints nothing on bad input, so it never blocks a prompt.
+| Why the agent stopped | What prompter changes |
+|---|---|
+| The message ended in a question, so the agent answered it and handed the decision back | The brief states what you allowed and what "done" means |
+| Permission was conditional ("if everything checks out…") and nothing was measurable | "Merge only if the full test suite passes" |
+| Several goals were mixed into one long paste with no order | An ordered, bounded task list |
+| A side question got lost in a long message with logs | The report answers every question, one line each |
+| Shell commands were blocked by the permission check until the turn ended | Before a long run, it checks the commands are allowlisted and asks you once |
 
 ---
 
-## 🚀 Quick start
+## What it does
 
-```powershell
-# 1. link the skill (Windows junction)
-New-Item -ItemType Junction -Path "$HOME\.claude\skills\prompter" -Target "C:\Users\tzaru\Documents\AI Development OS\prompter"
+- 🎚️ **On for one session.** `/prompter` turns it on; `prompter off` turns it off. Other sessions don't notice.
+- 🧹 **Only when it helps.** Long messages, pastes and questions get a brief. `yes`, `go` and `continue` don't.
+- 📝 **Shows the plan, doesn't wait.** The brief comes first, then work starts in the same turn.
+- ✅ **Nothing dropped.** Your original message stays the source. The final report closes every question and item in it.
+- 🛡️ **Never adds permission.** Push, merge, delete and deploy happen only if you said so.
+- 🔑 **No surprise stalls.** `scripts/check_allowlist.py` finds the shell commands a long run needs that your settings don't allow yet. It proposes narrow rules and never writes them itself.
 
-# 2. register the hook: add this under "hooks" in ~/.claude/settings.json
+---
+
+## Install
+
+```bash
+# 1. get the skill into Claude Code's skill folder
+git clone https://github.com/EranTzarum/prompter.git ~/.claude/skills/prompter
+
+# 2. verify
+cd ~/.claude/skills/prompter && python3 -m unittest discover tests   # expected: Ran 26 tests ... OK
+
+# 3. register the hook: add this to "hooks" in ~/.claude/settings.json
 #    "UserPromptSubmit": [{ "hooks": [{ "type": "command",
-#      "command": "py -3 \"C:/Users/tzaru/Documents/AI Development OS/prompter/hooks/prompter_hook.py\"",
-#      "timeout": 5 }] }]
-
-# 3. verify
-py -3 -m unittest discover tests      # Ran 26 tests ... OK
-
-# 4. first run: in a new Claude Code session
-/prompter
+#       "command": "python3 ~/.claude/skills/prompter/hooks/prompter_hook.py", "timeout": 5 }] }]
 ```
 
 > [!TIP]
-> Say `prompter off` to pause it for one session. Short replies like `yes`, `go` or `continue` never get a brief, so you can keep chatting normally.
+> On Windows, use `py -3` instead of `python3`, and write the hook path with forward slashes in quotes.
 
-<details>
-<summary><b>Codex, Cursor, WSL</b></summary>
-
-| Platform | Status |
-|---|---|
-| Codex | not in v1; no equivalent per-message hook has been checked yet |
-| Cursor | not in v1 |
-| WSL | not in v1; the hook path above is Windows |
-
-</details>
+Then open a new session and type `/prompter`. Claude replies with one line saying it's on.
 
 ---
 
-## 🧭 Usage
+## Try it
 
-| Command | What happens |
-|---|---|
-| `/prompter` | Turns the mode on for this session. Claude replies with one line. |
-| any long message or question | Claude shows the brief, then works to the end. |
-| `yes` / `go` / `continue` | Passes through untouched. |
-| `prompter off` or `/prompter off` | Turns the mode off for this session. |
-| `py -3 scripts/check_allowlist.py --commands cmds.txt` | Lists the commands that aren't allowlisted and the rules it proposes (exit 1 if any are missing). |
+You send this (a typical end-of-day message):
+
+```text
+done with step 1. logs below:
+  ERROR web bundling failed: cannot resolve ./worker.wasm
+  WARN  no route named "(auth)" in layout
+if everything checks out and tests pass, merge it.
+also - why do I need a maps API key? and where is the "refresh log" button?
+```
+
+Claude answers with a brief, then starts working:
+
+```text
+Goal:         fix the web bundle error and the route warning, merge, answer 2 questions
+Permission:   merge to main only if the full test suite passes; no deploy
+Tasks:        1. fix bundle  2. fix route  3. run tests  4. merge  5. answer questions
+Done:         suite green, merge commit on main
+Stop only if: a failing test I can't explain
+Report:       what changed, test result, merge commit, one line per question
+```
+
+The final report ends with one line for the API key and one for the refresh button. Nothing you asked gets skipped.
+
+### Before a long run
 
 <p align="center">
-  <img src="docs/assets/terminal.svg" alt="check_allowlist output for the case-5 commands" width="860">
+  <img src="docs/assets/terminal.svg" alt="check_allowlist lists seven commands that would have been blocked and the narrow rule for each" width="860">
 </p>
 
 ```bash
-py -3 scripts/check_allowlist.py --commands tests/fixtures/case5-commands.txt --settings tests/fixtures/case5-settings-before.json
+python3 scripts/check_allowlist.py --commands run-commands.txt
 ```
 
 ---
 
-## ⚙️ How it works
+## How it works
 
 ```mermaid
 sequenceDiagram
     participant You
     participant Hook as prompter_hook.py
     participant Claude
-    You->>Hook: message (session_id, prompt)
-    Hook->>Hook: flag on? substantial?
-    Hook-->>Claude: additionalContext = protocol.txt
-    Claude-->>You: brief (goal · tasks · done · stop-if)
-    Claude->>Claude: execute to the end
-    Claude-->>You: report
+    You->>Hook: your message (unchanged)
+    Hook->>Hook: on for this session? long enough?
+    Hook-->>Claude: + the protocol, as extra context
+    Claude-->>You: brief
+    Claude->>Claude: work through the tasks
+    Claude-->>You: report: every question answered
 ```
 
-1. **A hook, not a rewrite.** A hook can't replace your text, but it can attach instructions before Claude reads it. Claude rebuilds the message as a visible brief.
-2. **Two causes, two fixes.** The brief fixes prompt-shaped stops. The allowlist check fixes harness-shaped stops.
-3. **The original stays the source.** The brief steers the work; the report is checked against your full message.
-4. **One up-front question at most.** Gaps get filled from files first. Anything only you can answer is asked once, before work starts.
+1. **A hook adds, never edits.** Claude Code runs the hook before it reads your message. The hook attaches the rules next to your text; your text arrives untouched.
+2. **Two kinds of stop, two fixes.** The brief handles stops caused by how a message is written. The allowlist check handles stops caused by permissions.
+3. **One question at most, up front.** Gaps get filled from the repo first. Anything only you can decide is asked once, before work starts.
 
-| # | Part | Takes | Produces |
-|---|---|---|---|
-| 1 | `hooks/prompter_hook.py` | hook input JSON on stdin | `additionalContext`, or nothing |
-| 2 | `protocol.txt` | — | the injected rules (short form) |
-| 3 | `SKILL.md` | `/prompter` | the full protocol, with an example |
-| 4 | `scripts/check_allowlist.py` | command list + settings files | missing parts + proposed rules |
+| Part | Takes | Produces |
+|---|---|---|
+| `hooks/prompter_hook.py` | your message and session id | the protocol as extra context, or nothing |
+| `protocol.txt` | — | the 7 rules Claude follows |
+| `SKILL.md` | `/prompter` | the full rules, with an example |
+| `scripts/check_allowlist.py` | a command list + your settings | what's blocked, and narrow rules to allow it |
 
 ---
 
-## 🗂 Repository map
-
-<details>
-<summary><b>Show the tree</b></summary>
-
-```
-SKILL.md                      skill: trigger, full protocol, example
-protocol.txt                  text the hook injects
-hooks/prompter_hook.py        UserPromptSubmit hook
-scripts/check_allowlist.py    allowlist checker (read-only)
-tests/                        unittest suites
-tests/fixtures/               6 real prompts (cases 1-6), case-5 commands and settings
-docs/design.md                evidence and decisions
-docs/evals.md                 model-behaviour eval protocol and results
-docs/assets/                  README images
-```
-
-</details>
-
----
-
-## 🧪 Verify
+## Verify
 
 ```bash
-py -3 -m unittest discover tests
+python3 -m unittest discover tests
 ```
 
-The tests prove the hook's on/off switch, per-session isolation, the short-reply pass-through and its silence on bad input. They also prove the checker flags the real case-5 commands.
+The tests prove the on/off switch, that sessions stay separate, that short replies pass through, and that bad input never blocks a prompt. They also prove the allowlist check catches compound commands and refuses risky ones.
 
 > [!NOTE]
-> Unit tests can't judge Claude's writing. [docs/evals.md](docs/evals.md) does that with headless `claude -p` runs in plan mode on the real prompts.
+> Unit tests can't judge what Claude writes. [docs/evals.md](docs/evals.md) has the model-level checks: headless runs on anonymized real prompts.
 
 ---
 
-## 🧩 Extend
+## Extend
 
-- **Change what counts as substantial:** `substantial()` in `hooks/prompter_hook.py`, plus `tests/test_hook.py`.
-- **Change the rules Claude follows:** `protocol.txt` and `SKILL.md` together, then rerun `docs/evals.md`.
-- **Add a destructive-command pattern:** `DESTRUCTIVE` in `scripts/check_allowlist.py`, plus `tests/test_check_allowlist.py`.
+- **Change what counts as "long enough":** `substantial()` in `hooks/prompter_hook.py`, plus `tests/test_hook.py`.
+- **Change the rules:** edit `protocol.txt` and `SKILL.md` together, then rerun [docs/evals.md](docs/evals.md).
+- **Add a risky-command pattern:** `DESTRUCTIVE` in `scripts/check_allowlist.py`, plus `tests/test_check_allowlist.py`.
 
 ---
 
-## ❓ FAQ
+## FAQ
 
-<details><summary><b>Does it change my message?</b></summary>
+<details><summary><b>Does it change what I wrote?</b></summary>
 
-No. Your text reaches Claude unchanged; the hook only adds context next to it.
+No. Your message reaches Claude exactly as typed. The hook only adds context next to it.
 </details>
 
-<details><summary><b>Does Claude still see my logs and pasted text, or only the brief?</b></summary>
+<details><summary><b>Does Claude still read my logs and pasted text, or only the brief?</b></summary>
 
-All of it. The brief is Claude's own summary. The original stays the source, and the report has to answer every question in it.
+All of it. The brief is Claude's own summary; your full message stays the source for the final report.
 </details>
 
-<details><summary><b>Does it edit settings or grant permissions?</b></summary>
+<details><summary><b>Can it push, merge or deploy on its own?</b></summary>
 
-No. `check_allowlist.py` only reads settings and proposes rules, and you approve any change.
+No. The brief never adds permission you didn't give, and the allowlist check only proposes rules.
 </details>
 
-<details><summary><b>Does it add push/merge/deploy on its own?</b></summary>
+<details><summary><b>Will it slow down quick replies?</b></summary>
 
-No. The brief never widens what you said.
+No. Short replies pass straight through.
 </details>
 
-<details><summary><b>Does it slow down short replies?</b></summary>
+<details><summary><b>What if I forget to register the hook?</b></summary>
 
-No. They pass through, and the hook adds nothing.
+The skill tells Claude to follow the rules on its own for the session and to tell you the hook is missing.
 </details>
 
-<details><summary><b>What if the hook isn't registered?</b></summary>
+<details><summary><b>Does it work in Codex or Cursor?</b></summary>
 
-The skill tells Claude to apply the protocol by itself for the rest of the session and to say that the hook is missing.
-</details>
-
-<details><summary><b>Does it survive compaction and resume?</b></summary>
-
-Compaction, yes: the hook runs on every message. For resume, if a resumed session gets a new `session_id`, type `/prompter` again.
+Not yet. It relies on Claude Code's per-message hook.
 </details>
 
 ---
 
-## 📄 License
+## License
 
 [MIT](LICENSE) © 2026 Eran Tzarum
 
-<div align="center"><sub>Made for agents that should finish what they start.</sub></div>
+<div align="center"><sub>For agents that should finish what they start.</sub></div>

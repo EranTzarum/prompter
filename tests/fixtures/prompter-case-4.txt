@@ -1,4 +1,4 @@
-# source: C:\Users\tzaru\.claude/projects\c--Users-tzaru-Documents-CV-s-Resume-Automation\d0f5a5b0-b206-466d-9e70-f863b8276f3b.jsonl
+# anonymized: invented text with the same problem shape as a real prompt that stopped early (cause A: ends in a question, never says 'run it')
 
-I'm not doing the diff. I'm not going to inspect every one of the new codes that was written. I just want to run the Python phase, the hunt phase, the connect phase, and the follow-up phase, and see that everything is still working, probably. If so, I will approve those changes. 
-But I don't know what the changes were. Was the hunt phase affected by the changes, or also the connect and the follow-up?
+I'm not doing the diff. I'm not going to inspect every line of the new code that was written. I just want to run the import phase, the enrich phase, the send phase and the follow-up phase, and see that everything is still working, probably. If so, I will approve it.
+But I don't know what the changes were. Was the import phase affected by the changes, or also the send and the follow-up?

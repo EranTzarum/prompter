@@ -42,7 +42,7 @@ Report: <what the final message lists>
 
 ### 2. Fill gaps from files, not from the user
 
-Read CLAUDE.md, the issue, the vault note, or the code before asking. Ask only what only
+Read CLAUDE.md, the issue, the project notes, or the code before asking. Ask only what only
 the user can answer (a business choice, a credential, authority not given), in **one**
 batched question **before** starting, and only when it blocks. Otherwise pick the safe
 default and state it in the brief ("assuming: separate branch, no push").
@@ -87,7 +87,7 @@ The report:
 - answers **every** question in it, one line each ("Why Google API? …", "Refresh log - where? …");
 - ticks off every item or step it mentions: done, or not done and why.
 
-Nothing is silently dropped. Real miss that led to this rule: a BroFix message with
+Nothing is silently dropped. Real miss that led to this rule: a mobile-app message with
 terminal logs and four questions, where "Refresh log - where?" had no task in the
 brief (`tests/fixtures/prompter-case-6.txt`).
 

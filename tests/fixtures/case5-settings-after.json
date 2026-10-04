@@ -11,8 +11,8 @@
       "Bash(claude --version)",
       "Bash(claude -p --strict-mcp-config --output-format json --model *)",
       "Bash(py -3 .scratch/models/*)",
-      "Bash(py -3 bin/tests/test_crew.py)",
-      "Bash(py -3 bin/tests/test_crew.py *)",
+      "Bash(py -3 tests/run_tests.py)",
+      "Bash(py -3 tests/run_tests.py *)",
       "Bash(git status*)",
       "Bash(git diff*)",
       "Bash(git log*)",
@@ -24,8 +24,8 @@
       "Bash(git add FACTORY_ARCHITECTURE.md)",
       "Bash(git commit -m *)",
       "Bash(git commit -F *)",
-      "Bash(git push origin feat/models-2026-09)",
-      "Bash(git push -u origin feat/models-2026-09)"
+      "Bash(git push origin feat/model-catalog)",
+      "Bash(git push -u origin feat/model-catalog)"
     ]
   }
 }

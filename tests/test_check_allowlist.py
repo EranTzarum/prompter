@@ -55,8 +55,8 @@ class Proposals(unittest.TestCase):
         self.assertEqual(ca.propose("Bash", "codex --version"), "Bash(codex --version)")
 
     def test_interpreter_is_pinned_to_the_script(self):
-        self.assertEqual(ca.propose("Bash", "py -3 bin/tests/test_crew.py -k x"),
-                         "Bash(py -3 bin/tests/test_crew.py *)")
+        self.assertEqual(ca.propose("Bash", "py -3 tests/run_tests.py -k x"),
+                         "Bash(py -3 tests/run_tests.py *)")
         self.assertEqual(ca.propose("Bash", "py -3 -m unittest discover tests"),
                          "Bash(py -3 -m unittest *)")
 

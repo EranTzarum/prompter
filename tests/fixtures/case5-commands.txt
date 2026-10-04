@@ -1,8 +1,8 @@
-# Commands the model-catalogue run (case 5) needed. One per line; "PowerShell: " prefix for that tool.
+# Commands the model-catalogue run (case 5, anonymized) needed. One per line; "PowerShell: " prefix for that tool.
 codex --version
 codex debug models
-py -3 bin/tests/test_crew.py
+py -3 tests/run_tests.py
 git status -sb
-git commit -m "feat(models): add 2026-09 models"
-git push origin feat/models-2026-09
+git commit -m "feat(models): add new models"
+git push origin feat/model-catalog
 codex debug models | py -3 -c "import sys,json; print(len(json.load(sys.stdin)))"

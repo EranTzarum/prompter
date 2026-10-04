@@ -1,4 +1,4 @@
-# source: C:\Users\tzaru\.claude/projects\C--Users-tzaru-Documents-My-realestate-agency\76974678-a458-4bbd-a80c-e84ae6d75eaf.jsonl
+# anonymized: invented text with the same problem shape as a real prompt that stopped early (cause A: permission only conditional, 'checks out' not measurable)
 
-I did all the steps. If we finish with this part of the plan, and we can go live, and everything checks out, and all the tests pass, and we can safely merge everything into `main`, I would like us to do it. 
-After that, we will do the testing, and from there we continue with all the other plan and essential things we Discuss, because I don't think we are done with the full plan, only with one phase.
+I did all the steps. If we finish this part of the plan, and we can go live, and everything checks out, and all the tests pass, and we can safely merge everything into `main`, I would like us to do it.
+After that, we will do the testing, and from there we continue with the rest of the plan. Make sure nothing breaks on the way.

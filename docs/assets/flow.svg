@@ -1,33 +1,45 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="980" height="220" viewBox="0 0 980 220" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13">
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="260" viewBox="0 0 980 260" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13">
   <defs>
-    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#57606a"/></marker>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#14B8A6"/></marker>
   </defs>
-  <rect width="980" height="220" fill="#ffffff"/>
-  <rect x="14" y="14" width="952" height="170" rx="12" fill="#f4f6fb" stroke="#9aa7c7"/>
-  <text x="30" y="38" fill="#3b4a6b" font-weight="bold">EVERY SUBSTANTIAL MESSAGE, AFTER /prompter</text>
-  <g font-size="12" fill="#1f2937">
-    <rect x="30" y="54" width="140" height="110" rx="8" fill="#fff" stroke="#9aa7c7"/>
-    <text x="100" y="74" text-anchor="middle" font-weight="bold">1 · You type</text>
-    <text x="100" y="96" text-anchor="middle">long prompt,</text><text x="100" y="112" text-anchor="middle">pasted report,</text><text x="100" y="128" text-anchor="middle">or a question</text>
-    <rect x="190" y="54" width="140" height="110" rx="8" fill="#fff" stroke="#9aa7c7"/>
-    <text x="260" y="74" text-anchor="middle" font-weight="bold">2 · Hook</text>
-    <text x="260" y="96" text-anchor="middle">flag on? substantial?</text><text x="260" y="112" text-anchor="middle">attach protocol.txt</text><text x="260" y="128" text-anchor="middle">as context</text>
-    <rect x="350" y="54" width="140" height="110" rx="8" fill="#fff" stroke="#9aa7c7"/>
-    <text x="420" y="74" text-anchor="middle" font-weight="bold">3 · Brief</text>
-    <text x="420" y="96" text-anchor="middle">goal · permission</text><text x="420" y="112" text-anchor="middle">tasks · done</text><text x="420" y="128" text-anchor="middle">stop-if · report</text>
-    <rect x="510" y="54" width="140" height="110" rx="8" fill="#fff" stroke="#9aa7c7"/>
-    <text x="580" y="74" text-anchor="middle" font-weight="bold">4 · Allowlist</text>
-    <text x="580" y="96" text-anchor="middle">long run only:</text><text x="580" y="112" text-anchor="middle">check_allowlist.py</text><text x="580" y="128" text-anchor="middle">one question up front</text>
-    <rect x="670" y="54" width="140" height="110" rx="8" fill="#fff" stroke="#9aa7c7"/>
-    <text x="740" y="74" text-anchor="middle" font-weight="bold">5 · Execute</text>
-    <text x="740" y="96" text-anchor="middle">to the end,</text><text x="740" y="112" text-anchor="middle">stop only on named</text><text x="740" y="128" text-anchor="middle">conditions → report</text>
-    <g stroke="#57606a" stroke-width="1.5" marker-end="url(#a)">
-      <line x1="170" y1="109" x2="190" y2="109"/><line x1="330" y1="109" x2="350" y2="109"/><line x1="490" y1="109" x2="510" y2="109"/><line x1="650" y1="109" x2="670" y2="109"/>
-    </g>
+  <rect width="980" height="260" fill="#ffffff"/>
+  <!-- before: a messy message -->
+  <text x="30" y="34" fill="#0F2E2B" font-weight="bold" font-size="14">YOUR MESSAGE</text>
+  <path d="M38 50h238a12 12 0 0 1 12 12v120a12 12 0 0 1-12 12H110l-26 22v-22H38a12 12 0 0 1-12-12V62a12 12 0 0 1 12-12z" fill="#fff" stroke="#0F2E2B" stroke-width="2.5" stroke-linejoin="round"/>
+  <g fill="#0F2E2B" font-size="12">
+    <text x="44" y="78">done. here are the logs:</text>
+    <text x="44" y="98" fill="#64748B" font-family="Consolas, monospace" font-size="11">ERROR bundling failed (44s)…</text>
+    <text x="44" y="116" fill="#64748B" font-family="Consolas, monospace" font-size="11">WARN no route named "(auth)"…</text>
+    <text x="44" y="138">if it all checks out, merge it?</text>
+    <text x="44" y="158">also why do I need an API key?</text>
+    <text x="44" y="178">and where is the log screen?</text>
   </g>
-  <rect x="826" y="54" width="130" height="110" rx="12" fill="#fff7ed" stroke="#f0883e"/>
-  <text x="891" y="80" text-anchor="middle" fill="#9a3412" font-weight="bold" font-size="12">passes through</text>
-  <text x="891" y="104" text-anchor="middle" fill="#1f2937" font-size="12">yes · go · continue</text>
-  <text x="891" y="120" text-anchor="middle" fill="#1f2937" font-size="12">/other-commands</text>
-  <text x="891" y="136" text-anchor="middle" fill="#1f2937" font-size="12">prompter off</text>
+  <!-- arrow 1 -->
+  <line x1="300" y1="122" x2="352" y2="122" stroke="#14B8A6" stroke-width="3" marker-end="url(#a)"/>
+  <text x="326" y="110" text-anchor="middle" fill="#0F766E" font-size="11">hook</text>
+  <!-- brief -->
+  <text x="366" y="34" fill="#0F2E2B" font-weight="bold" font-size="14">THE BRIEF (shown, then work starts)</text>
+  <rect x="366" y="50" width="300" height="160" rx="12" fill="#CCFBF1" stroke="#14B8A6" stroke-width="2"/>
+  <g font-size="12" fill="#0F2E2B">
+    <text x="382" y="76"><tspan font-weight="bold">Goal</tspan>  fix the bundle error, answer 3 questions</text>
+    <text x="382" y="98"><tspan font-weight="bold">Permission</tspan>  merge only if all tests pass</text>
+    <text x="382" y="120"><tspan font-weight="bold">Tasks</tspan>  1. fix  2. test  3. merge  4. answer</text>
+    <text x="382" y="142"><tspan font-weight="bold">Done</tspan>  suite green, merge commit exists</text>
+    <text x="382" y="164"><tspan font-weight="bold">Stop only if</tspan>  a failure I can't explain</text>
+    <text x="382" y="186"><tspan font-weight="bold">Report</tspan>  every question, one line each</text>
+  </g>
+  <!-- arrow 2 -->
+  <line x1="678" y1="122" x2="730" y2="122" stroke="#14B8A6" stroke-width="3" marker-end="url(#a)"/>
+  <text x="704" y="110" text-anchor="middle" fill="#0F766E" font-size="11">runs</text>
+  <!-- report -->
+  <text x="744" y="34" fill="#0F2E2B" font-weight="bold" font-size="14">THE REPORT</text>
+  <rect x="744" y="50" width="218" height="160" rx="12" fill="#fff" stroke="#0F2E2B" stroke-width="2"/>
+  <g font-size="12" fill="#0F2E2B">
+    <text x="760" y="78"><tspan fill="#14B8A6" font-weight="bold">✓</tspan> bundle error fixed</text>
+    <text x="760" y="102"><tspan fill="#14B8A6" font-weight="bold">✓</tspan> tests green, merged</text>
+    <text x="760" y="126"><tspan fill="#14B8A6" font-weight="bold">✓</tspan> API key: needed for maps</text>
+    <text x="760" y="150"><tspan fill="#14B8A6" font-weight="bold">✓</tspan> log screen: Settings → Logs</text>
+    <text x="760" y="180" fill="#64748B" font-size="11">no question left behind</text>
+  </g>
+  <text x="490" y="246" text-anchor="middle" fill="#64748B" font-size="12">Short replies like "yes", "go" or "continue" skip all of this.</text>
 </svg>

@@ -1,13 +1,10 @@
-# source: C:\Users\tzaru\.claude/projects\C--Users-tzaru-Documents-AI-Development-OS-workflowai-factory\2b468a35-12ef-49cb-9617-65d725df263e.jsonl
+# anonymized: invented text with the same problem shape as a real prompt that stopped early (cause B: the run stalled on permission-check denials, not on the prompt)
 
-If you think first of all, I have a recommendation from the chat control tower in the project in the GPT 
+First of all, there's a recommendation from my planning chat:
 
-"F2 — PROPOSED
-F2 | Desktop product shell | Ship workflowai-factory as a local Windows desktop application that configures and operates the hidden local Factory engine while continuing to use the user's own official CLI subscriptions | Keeps D14 intact while replacing repo/CLI exposure with a product UX; begin only after F1 establishes a stable first-run, configuration and execution contract." 
+"P2 - PROPOSED | Desktop shell | Ship the tool as a local desktop app that configures and runs the engine while still using the user's own CLI subscriptions."
 
-And also there is a lot of new models that came out from openai and anthropic (gpt-6-astra, gpt-6-sol , gpt-6-terra, gpt-6-luna, sonnet 5.5 , opus 5.5 , fable 5.1) 
+Also, a lot of new models came out from the big providers this week, and I need to add them to the tool's model catalogue.
+I can only test them on the new account tomorrow, so until then you can work on a separate branch, add those models, and test them, before I test the whole thing myself tomorrow.
 
-That I need to add it to the factory 
-And only tomorrow I will be able to Open this new window account and begin the test so I'm thinking until then you can work on a separate branch to add those models and test them before tomorrow that I will test the fact which itself the other window account.
-
-# follow-up turn (the one that stalled): user replied "Go " (3 chars) to approve npm install -g @openai/codex@latest + per-model test calls. Agent ran 13 tools, hit 5 "auto mode classifier gave no verdict" denials on Bash/PowerShell, then ended: "Send any message (for example continue) and I will resume". Nudge 17:07: "Continue. Before resuming, add a narrow permission allowlist to this repo .claude/settings.json ..."
+# follow-up turn (the one that stalled): the user replied "Go" to approve a CLI update and one test call per model. The agent ran 13 tools, got 5 "permission check gave no verdict" denials on shell commands in a row, then ended with "send any message and I will resume".
