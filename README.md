@@ -62,7 +62,7 @@ A scan of a few hundred real agent sessions found the same few causes behind mos
 git clone https://github.com/EranTzarum/prompter.git ~/.claude/skills/prompter
 
 # 2. verify
-cd ~/.claude/skills/prompter && python3 -m unittest discover tests   # expected: Ran 26 tests ... OK
+cd ~/.claude/skills/prompter && python3 -m unittest discover tests   # expected: Ran 29 tests ... OK
 
 # 3. register the hook: add this to "hooks" in ~/.claude/settings.json
 #    "UserPromptSubmit": [{ "hooks": [{ "type": "command",
@@ -73,6 +73,8 @@ cd ~/.claude/skills/prompter && python3 -m unittest discover tests   # expected:
 > On Windows, use `py -3` instead of `python3`, and write the hook path with forward slashes in quotes.
 
 Then open a new session and type `/prompter`. Claude replies with one line saying it's on.
+
+To have it on in every new session, type `/prompter always` once. `/prompter always off` undoes it, and `prompter off` still turns it off for a single session.
 
 ---
 
@@ -191,7 +193,7 @@ The skill tells Claude to follow the rules on its own for the session and to tel
 
 <details><summary><b>Does it work in Codex or Cursor?</b></summary>
 
-Not yet. It relies on Claude Code's per-message hook.
+Not as a hook: it relies on Claude Code's per-message hook, and neither has one. For Codex there is an experimental manual variant: paste [`codex/AGENTS-snippet.md`](codex/AGENTS-snippet.md) into `~/.codex/AGENTS.md`. The same rules apply, but Codex decides by itself when a message is substantial, so it is less reliable than the hook. Feedback welcome.
 </details>
 
 ---

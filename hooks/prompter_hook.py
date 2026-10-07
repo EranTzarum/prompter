@@ -1,6 +1,8 @@
 """prompter - Claude Code UserPromptSubmit hook.
 
 /prompter turns the mode on for this session; "prompter off" turns it off.
+"/prompter always" makes it the default for every new session; "/prompter always off"
+undoes that (a session can still say "prompter off").
 While on, every substantial message gets protocol.txt attached as additionalContext,
 so Claude rebuilds it into a brief before acting. Always exits 0: a hook failure
 must never block a prompt.
@@ -13,14 +15,21 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 PROTOCOL = HERE.parent / "protocol.txt"
+ALWAYS = re.compile(r"^\s*/prompter(:prompter)?\s+always(\s+off)?\s*$", re.I)
 OFF = re.compile(r"^\s*(/prompter(:prompter)?\s+off\b|prompter\s+off\b|stop\s+prompter\b)", re.I)
 ON = re.compile(r"^\s*/prompter(:prompter)?\s*$", re.I)
 SAFE_ID = re.compile(r"^[A-Za-z0-9_-]{1,128}$")
 
 
-def flag_path(session_id):
-    home = Path(os.environ.get("PROMPTER_HOME") or Path.home() / ".claude" / "prompter")
-    return home / "active" / session_id
+def home_dir():
+    return Path(os.environ.get("PROMPTER_HOME") or Path.home() / ".claude" / "prompter")
+
+
+def enabled(flag):
+    # session flag wins ("on"/"off"); with none, the global default decides
+    if flag.exists():
+        return flag.read_text(encoding="utf-8").strip() == "on"
+    return (home_dir() / "always").exists()
 
 
 def substantial(prompt):
@@ -40,15 +49,25 @@ def main():
         return
     if not isinstance(prompt, str) or not isinstance(sid, str) or not SAFE_ID.match(sid):
         return
-    flag = flag_path(sid)
+    flag = home_dir() / "active" / sid
+    m = ALWAYS.match(prompt)
+    if m:
+        always = home_dir() / "always"
+        if m.group(2):
+            always.unlink(missing_ok=True)
+        else:
+            always.parent.mkdir(parents=True, exist_ok=True)
+            always.write_text("on", encoding="utf-8")
+        return
     if OFF.match(prompt):
-        flag.unlink(missing_ok=True)
+        flag.parent.mkdir(parents=True, exist_ok=True)
+        flag.write_text("off", encoding="utf-8")
         return
     if ON.match(prompt):
         flag.parent.mkdir(parents=True, exist_ok=True)
         flag.write_text("on", encoding="utf-8")
         return
-    if flag.exists() and substantial(prompt):
+    if enabled(flag) and substantial(prompt):
         text = PROTOCOL.read_text(encoding="utf-8")
         print(json.dumps({"hookSpecificOutput": {
             "hookEventName": "UserPromptSubmit", "additionalContext": text}}))

@@ -62,6 +62,21 @@ class Hook(unittest.TestCase):
             self.send(off)
             self.assertIsNone(self.send(LONG), off)
 
+    def test_always_applies_to_new_sessions(self):
+        self.send("/prompter always")
+        self.assertIsNotNone(self.send(LONG, session="new"))
+
+    def test_session_off_beats_always(self):
+        self.send("/prompter always")
+        self.send("prompter off", session="a")
+        self.assertIsNone(self.send(LONG, session="a"))
+        self.assertIsNotNone(self.send(LONG, session="b"))
+
+    def test_always_off_restores_default(self):
+        self.send("/prompter always")
+        self.send("/prompter always off")
+        self.assertIsNone(self.send(LONG))
+
     def test_sessions_are_isolated(self):
         self.send("/prompter", session="a")
         self.assertIsNotNone(self.send(LONG, session="a"))

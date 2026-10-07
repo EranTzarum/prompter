@@ -10,7 +10,13 @@ Turn on once per session with `/prompter`. From then on a UserPromptSubmit hook
 (≥ 300 chars, ≥ 5 lines, or a question). Short replies such as "yes", "go" and
 "continue" pass through untouched. `prompter off` turns it off for this session only.
 
+`/prompter always` makes it the default for every new session (a flag file in
+`~/.claude/prompter/always`); `/prompter always off` removes the default. In an
+always-on session, `prompter off` still turns it off for that session only.
+
 ## On activation
+
+- `/prompter always` → reply "prompter on by default for every session. `/prompter always off` to undo."
 
 - `/prompter` → reply with one line: "prompter on - substantial messages get a brief first. `prompter off` to stop."
 - `/prompter off` → reply "prompter off."
