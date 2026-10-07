@@ -31,3 +31,8 @@ py -3 -m unittest discover tests
 ```
 
 Run it before every commit. Behaviour changes to the protocol also need a pass of `docs/evals.md`.
+
+## Resuming work
+
+Start at `docs/TAKEOVER.md`: state, open items, gate and release steps. The session runs from the umbrella folder and works only inside this repo.
+
