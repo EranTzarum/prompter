@@ -57,6 +57,10 @@ A scan of a few hundred real agent sessions found the same few causes behind mos
 
 ## Install
 
+**Easiest:** paste this repo's link into Claude Code or Codex and say *"install this skill"*. The agent follows [INSTALL.md](INSTALL.md) and only asks before it edits your `settings.json`.
+
+Or by hand, for Claude Code:
+
 ```bash
 # 1. get the skill into Claude Code's skill folder
 git clone https://github.com/EranTzarum/prompter.git ~/.claude/skills/prompter
