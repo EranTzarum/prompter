@@ -36,8 +36,9 @@ Run it before every commit. Behaviour changes to the protocol also need a pass o
 
 Start at `docs/TAKEOVER.md`: state, open items, gate and release steps. The session runs from the umbrella folder and works only inside this repo.
 
-## Other hosts (was AGENTS.md)
+## Codex and Cursor
 
-v1 targets Claude Code only; the hook does not run in Codex or Cursor.
+The hook runs in Claude Code, and in Codex once its `UserPromptSubmit` entry in
+`~/.codex/hooks.json` is trusted (`/hooks`). Cursor has no equivalent yet.
 
 Resuming work: start at [docs/TAKEOVER.md](docs/TAKEOVER.md).
