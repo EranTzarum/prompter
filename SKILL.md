@@ -39,7 +39,7 @@ in the same turn. Do not wait for approval. Reading files to fill gaps comes aft
 
 ```text
 Goal: <one line>
-Permission: <only what the user said + CLAUDE.md; e.g. "commit and push to feat/x; no merge">
+Permission: <only what the user said + AGENTS.md/CLAUDE.md; e.g. "commit and push to feat/x; no merge">
 Tasks: 1. … 2. … 3. …   (ordered, each one bounded)
 Done: <measurable per task: failing test passes, full suite green, file exists, command output>
 Stop only if: <named conditions, e.g. unexplained test failure, a fix would weaken an invariant>
@@ -48,7 +48,7 @@ Report: <what the final message lists>
 
 ### 2. Fill gaps from files, not from the user
 
-Read CLAUDE.md, the issue, the project notes, or the code before asking. Ask only what only
+Read AGENTS.md (or CLAUDE.md), the issue, the project notes, or the code before asking. Ask only what only
 the user can answer (a business choice, a credential, authority not given), in **one**
 batched question **before** starting, and only when it blocks. Otherwise pick the safe
 default and state it in the brief ("assuming: separate branch, no push").

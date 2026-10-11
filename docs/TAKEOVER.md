@@ -1,13 +1,13 @@
 # prompter: takeover
 
-For the session that continues prompter. Read this first, then `CLAUDE.md`, `SKILL.md`,
+For the session that continues prompter. Read this first, then `AGENTS.md`, `SKILL.md`,
 `docs/design.md` (the evidence) and `docs/evals.md`.
 
 ## Where this session lives
 
 The session's working folder is the **umbrella** folder that holds all the repos, so it is listed with the
 manager in the app sidebar. It works **only inside `prompter/`**: edits, commits and pushes happen
-in this repo. The umbrella files (`CLAUDE.md`, `README.md`, `docs/`) belong to the manager session.
+in this repo. The umbrella files (`AGENTS.md`, `README.md`, `docs/`) belong to the manager session.
 
 ## State (2026-10-07)
 
