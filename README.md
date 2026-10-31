@@ -57,7 +57,7 @@ A scan of a few hundred real agent sessions found the same few causes behind mos
 
 ## Install
 
-**Easiest:** paste this repo's link into Claude Code or Codex and say *"install this skill"*. The agent follows [INSTALL.md](INSTALL.md) and only asks before it edits your `settings.json`.
+**Easiest:** paste this repo's link into Claude Code, Codex, Cursor or Antigravity and say *"install this skill"*. The agent follows [INSTALL.md](INSTALL.md) and only asks before it adds its one hook entry.
 
 Or by hand, for Claude Code:
 
@@ -195,9 +195,9 @@ No. Short replies pass straight through.
 The skill tells Claude to follow the rules on its own for the session and to tell you the hook is missing.
 </details>
 
-<details><summary><b>Does it work in Codex or Cursor?</b></summary>
+<details><summary><b>Does it work in Codex, Cursor or Antigravity?</b></summary>
 
-Not as a hook: it relies on Claude Code's per-message hook, and neither has one. For Codex there is an experimental manual variant: paste [`codex/AGENTS-snippet.md`](codex/AGENTS-snippet.md) into `~/.codex/AGENTS.md`. The same rules apply, but Codex decides by itself when a message is substantial, so it is less reliable than the hook. Feedback welcome.
+Yes, with the same hook script. Codex and Antigravity attach the protocol to each substantial message, like Claude Code. Cursor's per-prompt hook can't add context, so there it arrives once at session start and applies to the whole session. [INSTALL.md](INSTALL.md) has the entry for each host.
 </details>
 
 ---

@@ -1,45 +1,46 @@
 # Install prompter (instructions for an AI agent)
 
-You are Claude Code or Codex, and the user asked you to install this skill from its
-GitHub link. Follow the section for the agent you are. Do the steps yourself; ask the user
-only where a step says "ask". Finish with the short report at the bottom.
+You are Claude Code, Codex, Cursor or Antigravity, and the user asked you to install this
+skill from its GitHub link. Do the steps yourself; ask the user only where a step says
+"ask". Finish with the short report at the bottom.
 
 Repo: `https://github.com/EranTzarum/prompter`
 
-## If you are Claude Code
+Below, `PY` is `py -3` on Windows and `python3` elsewhere, and `HOOK` is the absolute path
+to `~/.claude/skills/prompter/hooks/prompter_hook.py` with forward slashes, in double quotes.
 
-1. Clone it into the skills folder (skip if it already exists; run `git pull` there instead):
+## 1. Get the code (every host)
+
+1. Clone it (skip if the folder exists; run `git pull` there instead):
    ```bash
    git clone https://github.com/EranTzarum/prompter.git ~/.claude/skills/prompter
    ```
-2. Verify (use `py -3` instead of `python3` on Windows):
-   ```bash
-   cd ~/.claude/skills/prompter && python3 -m unittest discover tests
-   ```
-   Expect `OK`. If it fails, stop and show the user the failing line.
-3. **Ask the user**: "I need to add one `UserPromptSubmit` hook entry to your
-   `~/.claude/settings.json` so prompter can attach its brief to your messages. OK?"
-   Only after a yes, merge this into the existing `hooks` object. Keep every other setting
-   and hook as is, and do not add a duplicate if an entry running `prompter_hook.py`
-   already exists:
-   ```json
-   "UserPromptSubmit": [{ "hooks": [{ "type": "command",
-     "command": "python3 ~/.claude/skills/prompter/hooks/prompter_hook.py", "timeout": 5 }] }]
-   ```
-   On Windows use `py -3` instead of `python3`, and write the path with forward slashes in quotes.
-4. Tell the user: "Installed. Open a new session and type `/prompter` to turn it on.
-   Type `/prompter always` once to have it on in every new session."
+2. Verify: run `PY -m unittest discover tests` in that folder. Expect `OK`. If it fails,
+   stop and show the user the failing line.
 
-## If you are Codex
+## 2. Register the hook for the host you are
 
-Codex has no per-message hook, so this is the manual variant (experimental).
+**Ask the user** once: "I need to add one hook entry to your <file> so prompter can attach
+its brief to your messages. OK?" Only after a yes, merge the entry into the file. Keep every
+other setting and hook as is, and add nothing if an entry running `prompter_hook.py` is
+already there.
 
-1. Fetch `https://raw.githubusercontent.com/EranTzarum/prompter/main/codex/AGENTS-snippet.md`.
-2. Append everything below its `---` line to `~/.codex/AGENTS.md`. Create the file if it
-   does not exist. If a `## prompter (manual variant)` heading is already there, replace that
-   block instead of adding a second one.
-3. Tell the user: "Installed. Open a new Codex session and send a task that is a few lines
-   long. I should start with a short brief before touching any tool."
+| You are | File | Entry |
+|---|---|---|
+| Claude Code | `~/.claude/settings.json` | under `"hooks"`: `"UserPromptSubmit": [{"hooks": [{"type": "command", "command": "PY HOOK", "timeout": 5}]}]` |
+| Codex | `~/.codex/hooks.json` | same as Claude Code. Then tell the user to trust it once with `/hooks` |
+| Antigravity | `~/.gemini/config/hooks.json` | top level: `"prompter": {"PreInvocation": [{"type": "command", "command": "PY HOOK", "timeout": 10}]}` |
+| Cursor | `~/.cursor/hooks.json` | under `"hooks"`: `"sessionStart": [{"command": "PY HOOK"}]` (keep `"version": 1`) |
+
+Also copy `SKILL.md`, `protocol.txt` and `scripts/` into the host's skills folder so the agent
+can read the full rules: `~/.codex/skills/prompter`, `~/.cursor/skills/prompter` or
+`~/.gemini/config/skills/prompter`. Claude Code already has them.
+
+## 3. Turn it on
+
+Tell the user: "Installed. Type `/prompter always` once (in Claude Code or Codex) to have it
+on in every new session, on every host." Cursor follows that switch only; per-session
+`/prompter` and `prompter off` work in Claude Code, Codex and Antigravity.
 
 ## Final report
 

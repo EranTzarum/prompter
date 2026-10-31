@@ -83,6 +83,24 @@ class Hook(unittest.TestCase):
         self.assertIsNone(self.send(ping))
         self.assertIsNotNone(self.send(ping + "\n" + LONG))
 
+    def run_raw(self, payload):
+        out = subprocess.run([sys.executable, str(HOOK)], input=json.dumps(payload), env=self.env,
+                             capture_output=True, text=True, encoding="utf-8", check=False)
+        self.assertEqual(out.returncode, 0, out.stderr)
+        return json.loads(out.stdout) if out.stdout.strip() else None
+
+    def test_antigravity_gets_an_ephemeral_step(self):
+        self.send("/prompter always")
+        agy = {"conversationId": "c1", "invocationNum": 0, "lastUserInput": LONG}
+        self.assertIn("PROMPTER", self.run_raw(agy)["injectSteps"][0]["ephemeralMessage"])
+        self.assertIsNone(self.run_raw(dict(agy, lastUserInput="yes")))
+
+    def test_cursor_session_start_follows_always(self):
+        start = {"hook_event_name": "sessionStart", "session_id": "c1"}
+        self.assertIsNone(self.run_raw(start))
+        self.send("/prompter always")
+        self.assertIn("whole session", self.run_raw(start)["additional_context"])
+
     def test_sessions_are_isolated(self):
         self.send("/prompter", session="a")
         self.assertIsNotNone(self.send(LONG, session="a"))

@@ -19,6 +19,9 @@ ALWAYS = re.compile(r"^\s*/prompter(:prompter)?\s+always(\s+off)?\s*$", re.I)
 OFF = re.compile(r"^\s*(/prompter(:prompter)?\s+off\b|prompter\s+off\b|stop\s+prompter\b)", re.I)
 ON = re.compile(r"^\s*/prompter(:prompter)?\s*$", re.I)
 SYSTEM = re.compile(r"<system-reminder>.*?</system-reminder>", re.S)
+SESSION_NOTE = ("PROMPTER is on for this whole session. Apply the rules below to every substantial "
+                "user message (300+ characters, 5+ lines, or a question). Short replies such as yes, "
+                "go or continue skip them. If the user says \"prompter off\", stop applying them.\n")
 SAFE_ID = re.compile(r"^[A-Za-z0-9_-]{1,128}$")
 
 
@@ -46,9 +49,19 @@ def substantial(prompt):
 def main():
     try:
         data = json.loads(sys.stdin.read())
-        prompt, sid = data.get("prompt"), data.get("session_id")
-    except (ValueError, AttributeError):
+    except ValueError:
         return
+    if not isinstance(data, dict):
+        return
+    if data.get("hook_event_name") == "sessionStart":
+        # Cursor: its per-prompt hook can't add context, so the always-on default
+        # attaches the protocol once, for the whole session.
+        if (home_dir() / "always").exists():
+            print(json.dumps({"additional_context": SESSION_NOTE + PROTOCOL.read_text(encoding="utf-8")}))
+        return
+    agy = "lastUserInput" in data  # Antigravity PreInvocation: runs before every model call
+    prompt = data.get("lastUserInput") if agy else data.get("prompt")
+    sid = data.get("conversationId") if agy else data.get("session_id")
     if not isinstance(prompt, str) or not isinstance(sid, str) or not SAFE_ID.match(sid):
         return
     flag = home_dir() / "active" / sid
@@ -71,6 +84,9 @@ def main():
         return
     if enabled(flag) and substantial(prompt):
         text = PROTOCOL.read_text(encoding="utf-8")
+        if agy:  # an ephemeral step reaches the model; a systemMessage step did not (tested)
+            print(json.dumps({"injectSteps": [{"ephemeralMessage": text}]}))
+            return
         print(json.dumps({"hookSpecificOutput": {
             "hookEventName": "UserPromptSubmit", "additionalContext": text}}))
 

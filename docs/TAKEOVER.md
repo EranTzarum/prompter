@@ -16,7 +16,8 @@ in this repo. The umbrella files (`AGENTS.md`, `README.md`, `docs/`) belong to t
   - Claude Code only, through a junction in `~/.claude/skills/prompter`.
   - Its hook is registered in the user's `~/.claude/settings.json` as a `UserPromptSubmit` entry
     running `py -3 ".../prompter/hooks/prompter_hook.py"`.
-  - No Codex or Cursor copies: they have no `UserPromptSubmit` hook.
+  - Same hook on Codex (`UserPromptSubmit`), Antigravity (`PreInvocation`, ephemeral step) and Cursor
+    (`sessionStart`, once per session); skill copies in each host's skills folder (2026-10-31).
 - **What it does:**
   - `/prompter` turns the mode on for one session, with a flag in `~/.claude/prompter/active/<id>`.
   - Every substantial message then gets `protocol.txt` attached: a brief before any tool call,
@@ -36,9 +37,8 @@ in this repo. The umbrella files (`AGENTS.md`, `README.md`, `docs/`) belong to t
 2. **The brief can be noisy on short tasks.** Messages over 300 characters always get a brief. The
    substantial-message heuristic (`substantial()` in the hook) may need a look once there is real
    use data.
-3. **Codex and Cursor.** If either gains a prompt-submit hook, port it. A manual variant now exists
-   (`codex/AGENTS-snippet.md`, experimental, untested in Codex): get a Codex user's feedback and add
-   a row to `docs/evals.md`.
+3. **Cursor per-prompt.** If Cursor's `beforeSubmitPrompt` gains `additional_context`, move Cursor from
+   `sessionStart` to it, so short replies skip the protocol there too.
 4. **Hook resilience.** The hook must stay exit-0 and silent on bad input; keep the tests for that.
    Check it after Claude Code updates that change the hook input or output format.
 

@@ -36,9 +36,10 @@ Run it before every commit. Behaviour changes to the protocol also need a pass o
 
 Start at `docs/TAKEOVER.md`: state, open items, gate and release steps. The session runs from the umbrella folder and works only inside this repo.
 
-## Codex and Cursor
+## Other hosts
 
-The hook runs in Claude Code, and in Codex once its `UserPromptSubmit` entry in
-`~/.codex/hooks.json` is trusted (`/hooks`). Cursor has no equivalent yet.
+One hook script serves Claude Code, Codex, Antigravity and Cursor; `SKILL.md` ("Hosts") has
+each host's hook and how the protocol arrives. Codex needs its entry trusted once (`/hooks`).
+Cursor gets it once per session (`sessionStart`), because its per-prompt hook can't add context.
 
 Resuming work: start at [docs/TAKEOVER.md](docs/TAKEOVER.md).

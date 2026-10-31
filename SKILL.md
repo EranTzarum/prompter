@@ -14,6 +14,19 @@ Turn on once per session with `/prompter`. From then on a UserPromptSubmit hook
 `~/.claude/prompter/always`); `/prompter always off` removes the default. In an
 always-on session, `prompter off` still turns it off for that session only.
 
+## Hosts
+
+One hook script (`hooks/prompter_hook.py`) serves every host; it reads the host's input
+shape and answers in that host's format. The on/off flags live in `~/.claude/prompter/`
+for all of them, so `/prompter always` turns it on everywhere.
+
+| Host | Hook | How the protocol arrives |
+|---|---|---|
+| Claude Code | `UserPromptSubmit` in `~/.claude/settings.json` | attached to each substantial message |
+| Codex | `UserPromptSubmit` in `~/.codex/hooks.json` (trust it once with `/hooks`) | attached to each substantial message |
+| Antigravity (app, IDE, `agy`) | `PreInvocation` in `~/.gemini/config/hooks.json` | an ephemeral step before each model call of a substantial message |
+| Cursor (IDE, `cursor-agent`) | `sessionStart` in `~/.cursor/hooks.json` | once per session, with a note to apply it to every substantial message; Cursor's per-prompt hook can't add context |
+
 ## On activation
 
 - `/prompter always` → reply "prompter on by default for every session. `/prompter always off` to undo."
