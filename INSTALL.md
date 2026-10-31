@@ -7,7 +7,9 @@ skill from its GitHub link. Do the steps yourself; ask the user only where a ste
 Repo: `https://github.com/EranTzarum/prompter`
 
 Below, `PY` is `py -3` on Windows and `python3` elsewhere, and `HOOK` is the absolute path
-to `~/.claude/skills/prompter/hooks/prompter_hook.py` with forward slashes, in double quotes.
+to `~/.claude/skills/prompter/hooks/prompter_hook.py` with forward slashes. Antigravity splits
+the command on spaces and ignores quotes, so that path must contain no spaces; use a link
+without spaces if the home folder has one. For the other hosts, quote it if it has spaces.
 
 ## 1. Get the code (every host)
 
