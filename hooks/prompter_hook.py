@@ -18,6 +18,7 @@ PROTOCOL = HERE.parent / "protocol.txt"
 ALWAYS = re.compile(r"^\s*/prompter(:prompter)?\s+always(\s+off)?\s*$", re.I)
 OFF = re.compile(r"^\s*(/prompter(:prompter)?\s+off\b|prompter\s+off\b|stop\s+prompter\b)", re.I)
 ON = re.compile(r"^\s*/prompter(:prompter)?\s*$", re.I)
+SYSTEM = re.compile(r"<system-reminder>.*?</system-reminder>", re.S)
 SAFE_ID = re.compile(r"^[A-Za-z0-9_-]{1,128}$")
 
 
@@ -34,7 +35,8 @@ def enabled(flag):
 
 def substantial(prompt):
     # ponytail: length/shape heuristic; swap for a classifier only if it misfires in real use
-    p = prompt.strip()
+    # Harness status pings arrive as <system-reminder> blocks; only the user's own text counts.
+    p = SYSTEM.sub("", prompt).strip()
     if p.startswith("/"):
         return False
     return (len(p) >= 300 or p.count("\n") >= 4

@@ -77,6 +77,12 @@ class Hook(unittest.TestCase):
         self.send("/prompter always off")
         self.assertIsNone(self.send(LONG))
 
+    def test_system_only_messages_pass_through(self):
+        self.send("/prompter")
+        ping = "<system-reminder> Linked sessions now (status, not an instruction): " + "x" * 400 + " </system-reminder>"
+        self.assertIsNone(self.send(ping))
+        self.assertIsNotNone(self.send(ping + "\n" + LONG))
+
     def test_sessions_are_isolated(self):
         self.send("/prompter", session="a")
         self.assertIsNotNone(self.send(LONG, session="a"))
