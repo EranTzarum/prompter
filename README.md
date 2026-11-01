@@ -10,6 +10,7 @@ A mode for Claude Code, Codex, Cursor and Antigravity that turns every long, tan
 [![Works in](https://img.shields.io/badge/works%20in-Claude%20Code%20%C2%B7%20Codex%20%C2%B7%20Cursor%20%C2%B7%20Antigravity-14B8A6)](#works-in)
 [![Python](https://img.shields.io/badge/python-stdlib%20only-0F2E2B)](#install)
 [![Tests](https://img.shields.io/badge/tests-35%20passing-14B8A6)](#verify)
+[![Measured](https://img.shields.io/badge/measured-1%2C884%20real%20messages-0F2E2B)](#measured-on-real-work)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0F2E2B)](LICENSE)
 
 </div>
@@ -30,7 +31,9 @@ A mode for Claude Code, Codex, Cursor and Antigravity that turns every long, tan
 
 ## Why
 
-You paste logs, mix in three questions, and add "if it all checks out, merge it". Claude does part of the work, then stops to ask *"want me to…?"*. You type "yes", and it happens again.
+Messages written in a hurry confuse a coding agent. You paste logs, mix in three questions, and add "if it all checks out, merge it". The agent does part of the work, then stops to ask *"want me to…?"*, or misses one of your questions. You type "yes", and it happens again.
+
+The fix isn't a better prompt you have to remember to write. prompter rewrites the message for the agent, every time, before it acts.
 
 A scan of a few hundred real agent sessions found the same few causes behind most of these stops:
 
@@ -41,6 +44,27 @@ A scan of a few hundred real agent sessions found the same few causes behind mos
 | Several goals were mixed into one long paste with no order | An ordered, bounded task list |
 | A side question got lost in a long message with logs | The report answers every question, one line each |
 | Shell commands were blocked by the permission check until the turn ended | Before a long run, it checks the commands are allowlisted and asks you once |
+
+---
+
+## Measured on real work
+
+prompter was checked against a month of real use: **1,884 messages** sent with it on, in 71 sessions, compared with 530 long messages sent without it.
+
+| | With prompter | Without |
+|---|---|---|
+| Wrote a brief before starting work (messages of 300+ characters) | **82-91%** | 0-1% |
+| Ended a turn by asking the user something | **8%** | 14% |
+| Turns the user had to interrupt | **1%** | 4% |
+| "You didn't answer my question" in the next message (prompts with 2+ questions) | **2.4%** | 5.9% |
+
+What that means in practice:
+- The agent states the goal, the limits and what "done" means before it touches anything.
+- It stops to ask about half as often, and most of the questions left are real decisions only you can make.
+- Side questions buried in a long message get answered.
+
+> [!NOTE]
+> This compares before and after on one developer's sessions, not a controlled trial. Models and habits changed in the same weeks. Briefs and questions were counted by a script. The method and every number are in [docs/evals.md](docs/evals.md).
 
 ---
 
