@@ -1,8 +1,6 @@
 <div align="center">
 
-<img src="docs/assets/logo.svg" alt="prompter logo" width="112">
-
-# prompter
+<img src="docs/assets/hero.webp" alt="prompter skill: tangled ribbons of a messy request (fix sign-in, broken export, why this API?, no deploy, 2 questions) straighten into the brief: Goal, Permission, Tasks, Done, Stop only if, Report" width="100%">
 
 **Say it messy. Get it finished.**
 A mode for Claude Code, Codex, Cursor and Antigravity that turns every long, tangled message into a short plan, then works it through to the end.
@@ -24,7 +22,7 @@ A mode for Claude Code, Codex, Cursor and Antigravity that turns every long, tan
 | Install once, then talk like you always do | Before the agent acts, it writes a 3-6 line **brief**: goal, permission, ordered tasks, what "done" means, when to stop | Work that runs to the end, and a report that answers **every question** you asked |
 
 <p align="center">
-  <img src="docs/assets/flow.svg" alt="A messy message with logs and three questions becomes a brief, then a report that answers each question" width="980">
+  <img src="docs/assets/how-it-works.webp" alt="Messy request, clear brief, finished work: a request with two side questions becomes a brief (goal, permission, tasks, done, stop only if, report), then work and a report that answers both questions with no deploy" width="980">
 </p>
 
 ---
