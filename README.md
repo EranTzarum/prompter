@@ -5,11 +5,11 @@
 # prompter
 
 **Say it messy. Get it finished.**
-A Claude Code mode that turns every long, tangled message into a short plan, then works it through to the end.
+A mode for Claude Code, Codex, Cursor and Antigravity that turns every long, tangled message into a short plan, then works it through to the end.
 
-[![Claude Code](https://img.shields.io/badge/Claude%20Code-skill%20%2B%20hook-14B8A6)](#install)
+[![Works in](https://img.shields.io/badge/works%20in-Claude%20Code%20%C2%B7%20Codex%20%C2%B7%20Cursor%20%C2%B7%20Antigravity-14B8A6)](#works-in)
 [![Python](https://img.shields.io/badge/python-stdlib%20only-0F2E2B)](#install)
-[![Tests](https://img.shields.io/badge/tests-26%20passing-14B8A6)](#verify)
+[![Tests](https://img.shields.io/badge/tests-35%20passing-14B8A6)](#verify)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0F2E2B)](LICENSE)
 
 </div>
@@ -20,7 +20,7 @@ A Claude Code mode that turns every long, tangled message into a short plan, the
 
 | You do | prompter does | You get |
 |---|---|---|
-| Type `/prompter` once, then talk like you always do | Before Claude acts, it writes a 3-6 line **brief**: goal, permission, ordered tasks, what "done" means, when to stop | Work that runs to the end, and a report that answers **every question** you asked |
+| Install once, then talk like you always do | Before the agent acts, it writes a 3-6 line **brief**: goal, permission, ordered tasks, what "done" means, when to stop | Work that runs to the end, and a report that answers **every question** you asked |
 
 <p align="center">
   <img src="docs/assets/flow.svg" alt="A messy message with logs and three questions becomes a brief, then a report that answers each question" width="980">
@@ -46,7 +46,7 @@ A scan of a few hundred real agent sessions found the same few causes behind mos
 
 ## What it does
 
-- 🎚️ **On for one session.** `/prompter` turns it on; `prompter off` turns it off. Other sessions don't notice.
+- 🎚️ **On everywhere, off when you want.** After install it's on in every new session, in every tool. `prompter off` turns it off for one session; `/prompter always off` turns the default off.
 - 🧹 **Only when it helps.** Long messages, pastes and questions get a brief. `yes`, `go` and `continue` don't.
 - 📝 **Shows the plan, doesn't wait.** The brief comes first, then work starts in the same turn.
 - ✅ **Nothing dropped.** Your original message stays the source. The final report closes every question and item in it.
@@ -57,28 +57,42 @@ A scan of a few hundred real agent sessions found the same few causes behind mos
 
 ## Install
 
-**Easiest:** paste this repo's link into Claude Code, Codex, Cursor or Antigravity and say *"install this skill"*. The agent follows [INSTALL.md](INSTALL.md) and only asks before it adds its one hook entry.
+Pick one.
 
-Or by hand, for Claude Code:
+**Option 1: ask your AI agent.** Paste this into Claude Code, Codex, Cursor or Antigravity:
 
-```bash
-# 1. get the skill into Claude Code's skill folder
-git clone https://github.com/EranTzarum/prompter.git ~/.claude/skills/prompter
-
-# 2. verify
-cd ~/.claude/skills/prompter && python3 -m unittest discover tests   # expected: Ran 29 tests ... OK
-
-# 3. register the hook: add this to "hooks" in ~/.claude/settings.json
-#    "UserPromptSubmit": [{ "hooks": [{ "type": "command",
-#       "command": "python3 ~/.claude/skills/prompter/hooks/prompter_hook.py", "timeout": 5 }] }]
+```text
+Install this skill for me: https://github.com/EranTzarum/prompter
 ```
 
-> [!TIP]
-> On Windows, use `py -3` instead of `python3`, and write the hook path with forward slashes in quotes.
+The agent follows [INSTALL.md](INSTALL.md). It asks you once before it touches any config.
 
-Then open a new session and type `/prompter`. Claude replies with one line saying it's on.
+**Option 2: two commands.**
 
-To have it on in every new session, type `/prompter always` once. `/prompter always off` undoes it, and `prompter off` still turns it off for a single session.
+```bash
+git clone https://github.com/EranTzarum/prompter.git ~/.claude/skills/prompter
+python3 ~/.claude/skills/prompter/scripts/install.py
+```
+
+On Windows, use `py -3` instead of `python3`.
+
+Either way, the installer finds every AI tool on your machine and sets up each one:
+- It adds one hook entry and copies the skill next to that tool's other skills.
+- It turns prompter on for every new session.
+- It keeps your other settings and never adds a second entry, so running it again is safe.
+
+Then restart any AI app that is open. In Codex, trust the new hook once with `/hooks`.
+
+### Works in
+
+| Tool | Hook | When the rules arrive |
+|---|---|---|
+| Claude Code | `UserPromptSubmit` | with each long message |
+| Codex | `UserPromptSubmit` | with each long message |
+| Antigravity (app, IDE, CLI) | `PreInvocation` | with each long message |
+| Cursor (IDE, CLI) | `sessionStart` | once, at the start of each chat |
+
+Cursor's per-message hook can't add context yet, so there the rules arrive once and cover the whole chat.
 
 ---
 
@@ -134,7 +148,7 @@ sequenceDiagram
     Claude-->>You: report: every question answered
 ```
 
-1. **A hook adds, never edits.** Claude Code runs the hook before it reads your message. The hook attaches the rules next to your text; your text arrives untouched.
+1. **A hook adds, never edits.** Your AI tool runs the hook before the model reads your message. The hook attaches the rules next to your text; your text arrives untouched.
 2. **Two kinds of stop, two fixes.** The brief handles stops caused by how a message is written. The allowlist check handles stops caused by permissions.
 3. **One question at most, up front.** Gaps get filled from the repo first. Anything only you can decide is asked once, before work starts.
 
@@ -144,6 +158,7 @@ sequenceDiagram
 | `protocol.txt` | — | the 7 rules Claude follows |
 | `SKILL.md` | `/prompter` | the full rules, with an example |
 | `scripts/check_allowlist.py` | a command list + your settings | what's blocked, and narrow rules to allow it |
+| `scripts/install.py` | the AI tools it finds on your machine | one hook entry and a skill copy in each |
 
 ---
 
@@ -197,7 +212,7 @@ The skill tells Claude to follow the rules on its own for the session and to tel
 
 <details><summary><b>Does it work in Codex, Cursor or Antigravity?</b></summary>
 
-Yes, with the same hook script. Codex and Antigravity attach the protocol to each substantial message, like Claude Code. Cursor's per-prompt hook can't add context, so there it arrives once at session start and applies to the whole session. [INSTALL.md](INSTALL.md) has the entry for each host.
+Yes. One installer sets up all four with the same hook script; see [Works in](#works-in).
 </details>
 
 ---

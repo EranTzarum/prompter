@@ -9,6 +9,7 @@ Why and evidence: `docs/design.md`.
 - `SKILL.md`: the skill, with the full protocol. `protocol.txt`: the text the hook injects. Keep the two consistent; `protocol.txt` is the short form.
 - `hooks/prompter_hook.py`: the hook (stdlib only).
 - `scripts/check_allowlist.py`: the allowlist checker (stdlib only). It reads settings only.
+- `scripts/install.py`: the installer for every host (stdlib only). It adds one hook entry per host, copies the skill and sets the always-on flag. It never adds a second entry and never overwrites a config it can't parse.
 - `tests/`: `unittest`. `tests/fixtures/`: real prompts that stopped early, and the case-5 settings.
 
 ## Rules

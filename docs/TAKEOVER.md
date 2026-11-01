@@ -11,7 +11,7 @@ in this repo. The umbrella files (`AGENTS.md`, `README.md`, `docs/`) belong to t
 
 ## State (2026-10-07)
 
-- **Repo:** public, `main` only, gate green (`py -3 -m unittest discover tests`, 29 tests).
+- **Repo:** public, `main` only, gate green (`py -3 -m unittest discover tests`, 35 tests).
 - **How it's installed:**
   - Claude Code only, through a junction in `~/.claude/skills/prompter`.
   - Its hook is registered in the user's `~/.claude/settings.json` as a `UserPromptSubmit` entry
